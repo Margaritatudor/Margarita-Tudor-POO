@@ -1,0 +1,102 @@
+#include <iostream>
+using namespace std;
+
+void afisare(int *v, int n) {
+    for (int i = 0; i < n; i++) {
+        cout << v[i] << (i + 1 < n ? " " : "\n");
+    }
+}
+
+// returnează indexul primului element minim
+int pozitieMin(int *v, int n) {
+    if (n <= 0) return -1;
+    int posMin = 0;
+    for (int i = 1; i < n; i++) {
+        if (v[i] < v[posMin]) {
+            posMin = i;
+        }
+    }
+    return posMin;
+}
+
+// adaugă un element la sfârșit (după realocare)
+void adaugaElement(int **pv, int *pn, int valoareNoua) {
+    int *vOld = *pv;
+    int newN = *pn + 1;
+    int *vNew = new int[newN];
+    for (int i = 0; i < *pn; i++) {
+        vNew[i] = vOld[i];
+    }
+    vNew[*pn] = valoareNoua;
+    delete[] vOld;
+    *pv = vNew;
+    *pn = newN;
+}
+
+// șterge toate aparițiile unui element dat (toate valorile egale cu x)
+void stergeToateValorile(int **pv, int *pn, int x) {
+    if (*pn == 0) return;
+    int *vOld = *pv;
+    // alocăm maxim *pn (să nu pierdem nimic)
+    int *vTemp = new int[*pn];
+    int j = 0;
+    for (int i = 0; i < *pn; i++) {
+        if (vOld[i] != x) {
+            vTemp[j++] = vOld[i];
+        }
+    }
+    delete[] vOld;
+    *pv = new int[j];
+    for (int i = 0; i < j; i++) {
+        (*pv)[i] = vTemp[i];
+    }
+    delete[] vTemp;
+    *pn = j;
+}
+
+int main() {
+    int n;
+    cout << "Câți elementi să aibă vectorul inițial? ";
+    cin >> n;
+    if (n <= 0) {
+        cout << "Dimensiune invalidă!\n";
+        return 0;
+    }
+
+    int *v = new int[n];
+    cout << "Introduceți " << n << " valori:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "v[" << i << "] = ";
+        cin >> v[i];
+    }
+
+    cout << "\nVectorul citit: ";
+    afisare(v, n);
+
+    int posMin = pozitieMin(v, n);
+    if (posMin >= 0) {
+        cout << "Poziția minimului: " << posMin 
+             << ", valoare = " << v[posMin] << "\n";
+    }
+
+    // Adaugăm un element nou la sfârșit
+    int valNou;
+    cout << "Introduceți o valoare nouă de adăugat: ";
+    cin >> valNou;
+    adaugaElement(&v, &n, valNou);
+    cout << "După adăugare vectorul: ";
+    afisare(v, n);
+
+    // Ștergem toate aparițiile unei valori
+    int valStergere;
+    cout << "Introduceți valoarea pe care doriți să o ștergeți (toate aparițiile): ";
+    cin >> valStergere;
+    stergeToateValorile(&v, &n, valStergere);
+    cout << "După ștergere vectorul: ";
+    afisare(v, n);
+
+    delete[] v;
+    return 0;
+}
+
+//P.S. mare bataie de cap cu referentierea si dereferentierea 
