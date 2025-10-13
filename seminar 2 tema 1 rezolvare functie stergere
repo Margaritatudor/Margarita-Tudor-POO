@@ -14,21 +14,23 @@ int pozitieMaximInVector(int* vector, int dimensiune) {
 	return pozitieMax;
 }
 
-void stergereElementDePePozitieData(
-	int** vector, int* dimensiune, int pozitie) {
-	int* vectorCopie = new int[*dimensiune - 1];
-	int j = 0;
-	for (int i = 0; i < *dimensiune; i++) {
-		if (i != pozitie) {
-			vectorCopie[j] = (*vector)[i];
-			j++;
-		}
+void stergePozitie(int **pv, int *pn, int poz) {
+    if (*pn <= 0) return;
+    if (poz < 0 || poz >= *pn) return;  // poziție invalidă — nu facem nimic
 
-	}
+    int *vOld = *pv;
+    int newN = *pn - 1;
+    int *vNew = new int[newN];
 
-	delete[] * vector;
-	(*dimensiune)--;
-	*vector = vectorCopie;
+    int j = 0;
+    for (int i = 0; i < *pn; i++) {
+        if (i == poz) continue;
+        vNew[j++] = vOld[i];
+    }
+
+    delete [] vOld;
+    *pv = vNew;
+    *pn = newN;
 }
 
 void main() {
