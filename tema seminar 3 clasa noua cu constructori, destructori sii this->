@@ -1,0 +1,73 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class Telefon {
+private:
+    char* marca;
+    char* model;
+    int anFabricatie;
+
+public:
+    Telefon() {
+        this->marca = new char[1];
+        this->marca[0] = '\0';
+        this->model = new char[1];
+        this->model[0] = '\0';
+        this->anFabricatie = 0;
+    }
+
+    Telefon(const char* marca, const char* model, int an) {
+        this->marca = new char[strlen(marca) + 1];
+        strcpy(this->marca, marca);
+        this->model = new char[strlen(model) + 1];
+        strcpy(this->model, model);
+        this->anFabricatie = an;
+    }
+
+    Telefon(const Telefon &other) {
+        this->marca = new char[strlen(other.marca) + 1];
+        strcpy(this->marca, other.marca);
+        this->model = new char[strlen(other.model) + 1];
+        strcpy(this->model, other.model);
+        this->anFabricatie = other.anFabricatie;
+    }
+
+    ~Telefon() {
+        delete[] this->marca;
+        delete[] this->model;
+    }
+
+    void afisare() {
+        cout << "Telefonul este marca " << this->marca
+             << ", model " << this->model
+             << ", fabricat in anul " << this->anFabricatie << "." << endl;
+    }
+
+    void seteazaAn(int an) {
+        if (an > 2000 && an <= 2100) {
+            this->anFabricatie = an;
+        } else {
+            cout << "Valoare an invalidă: " << an << endl;
+        }
+    }
+};
+
+int main() {
+    Telefon t1("Samsung", "Galaxy S21", 2021);
+    t1.afisare();
+
+    t1.seteazaAn(2022);
+    t1.afisare();
+
+    Telefon t2 = t1;
+    t2.afisare();
+
+    t2.seteazaAn(2025);
+    cout << "După modificare t2:\n";
+    t2.afisare();
+    cout << "t1 rămâne:\n";
+    t1.afisare();
+
+    return 0;
+}
