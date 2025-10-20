@@ -1,0 +1,74 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <string>
+using namespace std;
+
+class ProdusAlimentar {
+private:
+    const int id;
+    float pret;
+    string denumire;
+    int nrIngrediente;
+    float* cantitati;
+    static int nrProduseAlimentare;
+
+public:
+    ProdusAlimentar() : id(++nrProduseAlimentare) {
+        this->denumire = "Produs default";
+        this->pret = 0;
+        this->nrIngrediente = 0;
+        this->cantitati = nullptr;
+    }
+
+    ProdusAlimentar(string denumire, float pret, int nrIngrediente, float* cantitati)
+        : id(++nrProduseAlimentare) {
+        this->denumire = denumire;
+        this->pret = pret;
+        this->nrIngrediente = nrIngrediente;
+        this->cantitati = new float[this->nrIngrediente];
+        for (int i = 0; i < this->nrIngrediente; i++) {
+            this->cantitati[i] = cantitati[i];
+        }
+    }
+
+    ProdusAlimentar(const ProdusAlimentar& p) : id(++nrProduseAlimentare) {
+        this->denumire = p.denumire;
+        this->pret = p.pret;
+        this->nrIngrediente = p.nrIngrediente;
+        this->cantitati = new float[this->nrIngrediente];
+        for (int i = 0; i < this->nrIngrediente; i++) {
+            this->cantitati[i] = p.cantitati[i];
+        }
+    }
+
+    ~ProdusAlimentar() {
+        delete[] this->cantitati;
+    }
+
+    void afisareProdusAlimentar() const {
+        cout << "\nProdus " << this->id << ": " << this->denumire
+             << " | Pret: " << this->pret << " lei"
+             << " | Nr ingrediente: " << this->nrIngrediente << endl;
+
+        if (this->cantitati != nullptr) {
+            cout << "Cantitati ingrediente: ";
+            for (int i = 0; i < this->nrIngrediente; i++) {
+                cout << this->cantitati[i];
+                if (i < this->nrIngrediente - 1) cout << ", ";
+            }
+            cout << " (grame)";
+        }
+        cout << endl;
+    }
+
+    void seteazaPret(float pretNou) {
+        if (pretNou >= 0) {
+            this->pret = pretNou;
+        } else {
+            cout << "Pret invalid!\n";
+        }
+    }
+
+    void aplicaReducere(float procent) {
+        if (procent > 0 && procent < 100) {
+            this->pret -= this->pret * proce*
